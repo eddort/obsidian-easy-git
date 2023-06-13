@@ -41,13 +41,19 @@ export default class MyPlugin extends Plugin {
 				"Please, write a commit message",
 				(result) => {
 					try {
+						new Notice(`${this.settings.rootDir}`)
 						process.chdir(this.settings.rootDir);
 						execSync("git status");
 						execSync("git add .");
-						execSync(`git commit --amend --no-gpg-sign -m "${result}"`);
-						execSync(`git pull origin main --ff-only`)
+						execSync(
+							`git commit --no-gpg-sign -m "${result}"`
+						);
+						execSync(`git pull origin main`);
 						execSync(`git push origin main`);
-						new Notice(`Pushed to the main branch with "${result}" message`);
+						// execSync(`git pull origin main --ff-only`);
+						new Notice(
+							`Pushed to the main branch with "${result}" message`
+						);
 					} catch (err) {
 						new Notice(err.message);
 					}
